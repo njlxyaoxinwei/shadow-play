@@ -13,6 +13,7 @@ class Viewer : public QGLViewer {
   virtual void init();
  private:
   Mesh mesh_;
+  void draw_mesh_();
 };
 
 

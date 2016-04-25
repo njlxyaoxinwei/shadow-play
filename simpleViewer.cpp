@@ -12,8 +12,11 @@ namespace {
 
 Viewer::Viewer(const Mesh& mesh) : mesh_(mesh) {}
 
-
 void Viewer::draw() {
+  draw_mesh_();
+}
+
+void Viewer::draw_mesh_() {
 
   // draw first mesh
   const auto& mesh = mesh_;
