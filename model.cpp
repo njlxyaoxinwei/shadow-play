@@ -3,14 +3,13 @@
 
 #include <assimp/Importer.hpp>
 
+#include "helpers.h"
 #include "mesh.h"
 #include "model.h"
 
 namespace {
   using std::vector;
   using std::string;
-  using std::cerr;
-  using std::endl;
   using std::max;
   using std::fabs;
   using glm::vec3;
@@ -25,11 +24,6 @@ namespace {
     v2.y = v1.y;
     v2.z = v1.z;
     return v2;
-  }
-
-  template<typename T>
-  void LogError(const T& str) {
-    cerr << "ERROR:: " << str << endl;
   }
 } // namespace
 

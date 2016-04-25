@@ -3,20 +3,12 @@
 
 #include <qapplication.h>
 
-#include "mesh.h"
+#include "helpers.h"
 #include "model.h"
 #include "simpleViewer.h"
 
 namespace {
   using std::string;
-  using std::endl;
-  using std::cerr;
-
-  template<typename T>
-  void Die(const T& str) {
-    cerr << "ERROR:: " << str << endl;
-    exit(EXIT_FAILURE);
-  }
 
   Mesh GetMeshFromPath(const string& path) {
     Model m(path);

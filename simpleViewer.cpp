@@ -3,7 +3,6 @@
 #include <QDebug>
 
 #include "mesh.h"
-#include "model.h"
 #include "simpleViewer.h"
 
 namespace {
