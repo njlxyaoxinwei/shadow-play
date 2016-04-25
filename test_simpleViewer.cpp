@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
   QApplication app(argc, argv);
   
   // Instantiate the Viewer.
-  Viewer viewer;
+  Viewer viewer("../data/eight.off");
   
   viewer.setWindowTitle("Mesh Viewer");
   
