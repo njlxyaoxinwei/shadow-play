@@ -21,8 +21,12 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   include_directories(${ASSIMP_INCLUDE_DIR})
   
   add_executable(test_model test_model.cpp model.cpp)
+  add_executable(test_simpleViewer test_simpleViewer.cpp simpleViewer.cpp model.cpp)
+
+  qt5_use_modules(test_simpleViewer Xml OpenGL)
 
   target_link_libraries(test_model assimp)
+  target_link_libraries(test_simpleViewer assimp ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES})
 
 else()
 
