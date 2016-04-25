@@ -2,17 +2,17 @@
 
 #include <QGLViewer/qglviewer.h>
 
-#include "model.h"
+#include "mesh.h"
 
 class Viewer : public QGLViewer {
  public:
-  Viewer(const std::string& path);
+  Viewer(const Mesh& mesh);
 
  protected:
   virtual void draw();
   virtual void init();
  private:
-  Model model_;
+  Mesh mesh_;
 };
 
 

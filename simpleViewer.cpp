@@ -2,6 +2,7 @@
 
 #include <QDebug>
 
+#include "mesh.h"
 #include "model.h"
 #include "simpleViewer.h"
 
@@ -10,13 +11,13 @@ namespace {
 
 } // namepsace
 
-Viewer::Viewer(const string& path) : model_(path) {}
+Viewer::Viewer(const Mesh& mesh) : mesh_(mesh) {}
 
 
 void Viewer::draw() {
 
   // draw first mesh
-  const auto& mesh = model_.meshes[0];
+  const auto& mesh = mesh_;
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
 
