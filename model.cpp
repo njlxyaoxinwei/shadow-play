@@ -49,15 +49,12 @@ bool Model::loadModel_(const string& path) {
 Mesh Model::processMesh_(aiMesh* mesh) {
   vector<Vertex> vertices;
   vector<uint> indices;
-  
   for (uint i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
     const auto& v = mesh->mVertices[i];
     const auto& n = mesh->mNormals[i];
-    vec3 v2;
     // Positions
-    v2 = ConvertVector<vec3>(v);
-    vertex.Position = v2;
+    vertex.Position = ConvertVector<vec3>(v);
     // Normals
     vertex.Normal = ConvertVector<vec3>(n);
     vertices.push_back(vertex);
