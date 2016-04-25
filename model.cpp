@@ -1,16 +1,22 @@
+#include <string>
 #include <iostream>
 
 #include <assimp/Importer.hpp>
 
+#include "mesh.h"
 #include "model.h"
 
 namespace {
   using std::vector;
+  using std::string;
+  using std::cerr;
+  using std::endl;
   using glm::vec3;
+
 
   typedef unsigned int uint;
 
-  template<typename S, typename T>
+  template<typename T, typename S>
   T ConvertVector(const S& v1) {
     T v2;
     v2.x = v1.x;
@@ -40,24 +46,26 @@ bool Model::loadModel_(const string& path) {
   return true;
 }
 
-Mesh processMesh_(aiMesh* mesh) {
+Mesh Model::processMesh_(aiMesh* mesh) {
   vector<Vertex> vertices;
   vector<uint> indices;
   
   for (uint i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
-    auto* v = mesh->mVertices[i];
-    auto* n = mesh->mNormals[i];
-    // Positions;
-    vertex.Position = ConvertVector(v);
+    const auto& v = mesh->mVertices[i];
+    const auto& n = mesh->mNormals[i];
+    vec3 v2;
+    // Positions
+    v2 = ConvertVector<vec3>(v);
+    vertex.Position = v2;
     // Normals
-    vertex.Normal = ConvertVector(n);
+    vertex.Normal = ConvertVector<vec3>(n);
     vertices.push_back(vertex);
   }
 
   for (uint i = 0; i < mesh->mNumFaces; i++) {
     const auto& face = mesh->mFaces[i];
-    for (uint j = 0; j < face.nNumIndices; j++) {
+    for (uint j = 0; j < face.mNumIndices; j++) {
       indices.push_back(face.mIndices[j]);
     }
   }

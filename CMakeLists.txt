@@ -11,22 +11,21 @@ find_package(Qt5 QUIET COMPONENTS Xml OpenGL)
 
 find_package(QGLViewer)
 
-find_package(Assimp)
+find_package(assimp REQUIRED)
 
-find_package(Glm)
+find_package(glm REQUIRED)
 
-if (Qt5_FOUND AND QGLVIEWER_FOUND AND ASSIMP_FOUND AND GLM_FOUND)
-
+if (Qt5_FOUND AND QGLVIEWER_FOUND)
   include_directories(${QGLVIEWER_INCLUDE_DIR})
   include_directories(${GLM_INCLUDE_DIR})
   include_directories(${ASSIMP_INCLUDE_DIR})
   
   add_executable(test_model test_model.cpp model.cpp)
 
-  target_link_libraries(test_model ${ASSIMP_LIBRARIES})
+  target_link_libraries(test_model assimp)
 
 else()
 
-  message(STATUS "NOTICE: This example requires CGAL, QGLViewer, Qt5, GLM and Assimp.")
+  message(FATAL_ERROR "FATAL: This example requires CGAL, QGLViewer, Qt5, GLM and Assimp.")
 
 endif()

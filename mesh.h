@@ -25,7 +25,7 @@ class Mesh {
     vertices = vs;
     indices = is;
   };
-  ~Mesh();
+  ~Mesh() {};
   
 };
 

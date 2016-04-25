@@ -13,13 +13,13 @@
 class Model {
  public:
   std::vector<Mesh> meshes;
-  Model(const string& path) {
+  Model(const std::string& path) {
     loadModel_(path);
   }
   ~Model();
 
  private:
-  bool loadModel_(const string& path);
+  bool loadModel_(const std::string& path);
   Mesh processMesh_(aiMesh* mesh);
 };
 

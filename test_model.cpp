@@ -4,9 +4,9 @@
 
 int main(int argc, char const *argv[]) {
   Model *m = new Model("data/eight.off");
-  printf("%i\n", m->meshes.size());
+  printf("%lu\n", m->meshes.size());
   for (const auto& mesh : m->meshes) {
-    printf("%i %i\n", mesh.vertices.size(), mesh.indices.size());
+    printf("%lu %lu\n", mesh.vertices.size(), mesh.indices.size());
   }
   return 0;
 }
