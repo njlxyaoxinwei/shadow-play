@@ -24,6 +24,11 @@ namespace {
     v2.z = v1.z;
     return v2;
   }
+
+  template<typename T>
+  void LogError(const T& str) {
+    cerr << "ERROR:: " << str << endl;
+  }
 } // namespace
 
 bool Model::loadModel_(const string& path) {
@@ -36,7 +41,7 @@ bool Model::loadModel_(const string& path) {
   if (!scene 
       || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE 
       || !scene->mRootNode) {
-    cerr << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+    LogError(importer.GetErrorString());
     return false;
   }
   for (uint i = 0; i < scene->mNumMeshes; i++) {
@@ -49,6 +54,9 @@ bool Model::loadModel_(const string& path) {
 Mesh Model::processMesh_(aiMesh* mesh) {
   vector<Vertex> vertices;
   vector<uint> indices;
+  if (!mesh->HasNormals()) {
+    LogError("No Normals!");
+  }
   for (uint i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
     const auto& v = mesh->mVertices[i];
