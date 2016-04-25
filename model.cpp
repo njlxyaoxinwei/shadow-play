@@ -11,6 +11,8 @@ namespace {
   using std::string;
   using std::cerr;
   using std::endl;
+  using std::max;
+  using std::fabs;
   using glm::vec3;
 
 
@@ -57,6 +59,7 @@ Mesh Model::processMesh_(aiMesh* mesh) {
   if (!mesh->HasNormals()) {
     LogError("No Normals!");
   }
+  float normalizer = 1;
   for (uint i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
     const auto& v = mesh->mVertices[i];
@@ -66,6 +69,14 @@ Mesh Model::processMesh_(aiMesh* mesh) {
     // Normals
     vertex.Normal = ConvertVector<vec3>(n);
     vertices.push_back(vertex);
+    normalizer = max(normalizer, fabs(vertex.Position.x));
+    normalizer = max(normalizer, fabs(vertex.Position.y));
+    normalizer = max(normalizer, fabs(vertex.Position.z));
+  }
+
+  // Normalize all to [-1, 1]
+  for (auto& v : vertices) {
+    v.Position = v.Position * (1 / normalizer);
   }
 
   for (uint i = 0; i < mesh->mNumFaces; i++) {

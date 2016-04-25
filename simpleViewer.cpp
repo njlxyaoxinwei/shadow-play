@@ -1,5 +1,7 @@
 #include <string>
 
+#include <QDebug>
+
 #include "model.h"
 #include "simpleViewer.h"
 
@@ -42,7 +44,6 @@ void Viewer::draw() {
 void Viewer::init() {
   // Restore previous viewer state.
   restoreStateFromFile();
-
   // Opens help window
   // help();
 } 
