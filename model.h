@@ -16,7 +16,7 @@ class Model {
   Model(const std::string& path) {
     loadModel_(path);
   }
-  ~Model();
+  ~Model() {};
 
  private:
   bool loadModel_(const std::string& path);
