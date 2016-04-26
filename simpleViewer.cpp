@@ -1,19 +1,25 @@
 #include <string>
 
 #include <QDebug>
+#include <QGLViewer/manipulatedFrame.h>
 
 #include "mesh.h"
 #include "simpleViewer.h"
 
 namespace {
   using std::string;
-
+  using qglviewer::ManipulatedFrame;
+  using qglviewer::Vec;
 } // namepsace
 
 Viewer::Viewer(const Mesh& mesh) : mesh_(mesh) {}
 
 void Viewer::draw() {
+  glPushMatrix();
+  glMultMatrixd(mesh_frame_->matrix());
+  // drawAxis();
   draw_mesh_();
+  glPopMatrix();
 }
 
 void Viewer::draw_mesh_() {
@@ -46,7 +52,23 @@ void Viewer::draw_mesh_() {
 
 void Viewer::init() {
   // Restore previous viewer state.
+  setSceneRadius(30);
+  camera()->fitSphere(Vec(0,0,0), 1);
+
+  // Override mouse bindings
+  setMouseBinding(Qt::ControlModifier, Qt::LeftButton, QGLViewer::CAMERA, QGLViewer::ROTATE);
+  setMouseBinding(Qt::ControlModifier, Qt::RightButton, QGLViewer::CAMERA, QGLViewer::TRANSLATE);
+  setMouseBinding(Qt::ControlModifier, Qt::MidButton, QGLViewer::CAMERA, QGLViewer::ZOOM);
+  setWheelBinding(Qt::ControlModifier, QGLViewer::CAMERA, QGLViewer::ZOOM);
+
+  setMouseBinding(Qt::NoModifier, Qt::LeftButton, QGLViewer::FRAME, QGLViewer::ROTATE);
+  setMouseBinding(Qt::NoModifier, Qt::RightButton, QGLViewer::FRAME, QGLViewer::TRANSLATE);
+  setMouseBinding(Qt::NoModifier, Qt::MidButton, QGLViewer::FRAME, QGLViewer::ZOOM);
+  setWheelBinding(Qt::NoModifier, QGLViewer::FRAME, QGLViewer::ZOOM);
+  mesh_frame_ = new ManipulatedFrame();
+  setManipulatedFrame(mesh_frame_);
   restoreStateFromFile();
+
   // Opens help window
   // help();
 } 
