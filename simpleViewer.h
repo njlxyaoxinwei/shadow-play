@@ -14,7 +14,11 @@ class Viewer : public QGLViewer {
  private:
   Mesh mesh_;
   qglviewer::ManipulatedFrame *mesh_frame_;
+  qglviewer::ManipulatedFrame *light_frame_;
   void draw_mesh_();
+  void draw_light_();
+  void control_init_();
+  void light_init_();
 };
 
 
