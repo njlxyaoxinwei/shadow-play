@@ -30,6 +30,8 @@ void Viewer::draw_light_() {
 }
 
 void Viewer::draw() {
+  drawGrid(2);
+
   draw_light_();
 
   glPushMatrix();
@@ -101,7 +103,7 @@ void Viewer::light_init_() {
   light_frame_ = new ManipulatedFrame();
   setMouseTracking(true);
 
-  light_frame_->setPosition(0, 0, 2);
+  light_frame_->setPosition(0, 0, 2.5);
 }
 
 void Viewer::init() {
@@ -117,6 +119,7 @@ void Viewer::init() {
   mesh_frame_->setPosition(0, 0, 1);
 
   light_init_();
+  qDebug() << (char *)glGetString(GL_VERSION);
   // restoreStateFromFile();
 
   // Opens help window
