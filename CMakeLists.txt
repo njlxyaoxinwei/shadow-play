@@ -28,6 +28,9 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   target_link_libraries(test_model assimp)
   target_link_libraries(test_simpleViewer assimp ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES})
 
+  set_target_properties(test_model test_simpleViewer PROPERTIES
+                        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test")
+
 else()
 
   message(FATAL_ERROR "FATAL: This example requires CGAL, QGLViewer, Qt5, GLM and Assimp.")
