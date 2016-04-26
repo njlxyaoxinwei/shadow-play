@@ -2,6 +2,8 @@
 #include <iostream>
 
 #include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include "helpers.h"
 #include "mesh.h"
@@ -53,30 +55,15 @@ Mesh Model::processMesh_(aiMesh* mesh) {
   if (!mesh->HasNormals()) {
     LogError("No Normals!");
   }
-  vec3 center(0, 0, 0);
   for (uint i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
     const auto& v = mesh->mVertices[i];
     const auto& n = mesh->mNormals[i];
     // Positions
     vertex.Position = ConvertVector<vec3>(v);
-    center = center + vertex.Position;
     // Normals
     vertex.Normal = ConvertVector<vec3>(n);
     vertices.push_back(vertex);
-  }
-  
-  center = center * (1 / float(vertices.size()));
-  float normalizer = 1;
-  // Normalize all to [-1, 1] and centers
-  for (auto& v : vertices) {
-    v.Position = v.Position - center;
-    normalizer = max(normalizer, fabs(v.Position.x));
-    normalizer = max(normalizer, fabs(v.Position.y));
-    normalizer = max(normalizer, fabs(v.Position.z));
-  }
-  for (auto& v : vertices) {
-    v.Position = v.Position * (1 / normalizer);
   }
 
   for (uint i = 0; i < mesh->mNumFaces; i++) {
@@ -86,5 +73,8 @@ Mesh Model::processMesh_(aiMesh* mesh) {
     }
   }
 
-  return Mesh(vertices, indices);
+  Mesh m(vertices, indices);
+  m.center_mesh();
+  m.normalize_coords();
+  return m;
 }

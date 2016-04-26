@@ -5,8 +5,6 @@
 
 #include <vector>
 
-/* Header only Mesh Class */
-
 struct Vertex {
   // Position
   glm::vec3 Position;
@@ -20,6 +18,8 @@ class Mesh {
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
 
+  Mesh() {};
+
   Mesh(const std::vector<Vertex>& vs, 
        const std::vector<unsigned int>& is) {
     vertices = vs;
@@ -27,8 +27,14 @@ class Mesh {
   };
   ~Mesh() {};
 
+  // Move mesh to the center of local coordinates
+  glm::vec3 center_mesh();
 
+  // Normalized device coordinates to [-1, 1]
+  void normalize_coords();
+
+  // Mesh& operator+=(const Mesh& mesh);
   
-};
+ };
 
 #endif
