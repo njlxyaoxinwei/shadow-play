@@ -53,22 +53,28 @@ Mesh Model::processMesh_(aiMesh* mesh) {
   if (!mesh->HasNormals()) {
     LogError("No Normals!");
   }
-  float normalizer = 1;
+  vec3 center(0, 0, 0);
   for (uint i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
     const auto& v = mesh->mVertices[i];
     const auto& n = mesh->mNormals[i];
     // Positions
     vertex.Position = ConvertVector<vec3>(v);
+    center = center + vertex.Position;
     // Normals
     vertex.Normal = ConvertVector<vec3>(n);
     vertices.push_back(vertex);
-    normalizer = max(normalizer, fabs(vertex.Position.x));
-    normalizer = max(normalizer, fabs(vertex.Position.y));
-    normalizer = max(normalizer, fabs(vertex.Position.z));
   }
-
-  // Normalize all to [-1, 1]
+  
+  center = center * (1 / float(vertices.size()));
+  float normalizer = 1;
+  // Normalize all to [-1, 1] and centers
+  for (auto& v : vertices) {
+    v.Position = v.Position - center;
+    normalizer = max(normalizer, fabs(v.Position.x));
+    normalizer = max(normalizer, fabs(v.Position.y));
+    normalizer = max(normalizer, fabs(v.Position.z));
+  }
   for (auto& v : vertices) {
     v.Position = v.Position * (1 / normalizer);
   }

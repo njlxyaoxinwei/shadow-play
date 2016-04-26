@@ -34,7 +34,7 @@ void Viewer::draw() {
 
   glPushMatrix();
   glMultMatrixd(mesh_frame_->matrix());
-  // drawAxis();
+  drawAxis();
   draw_mesh_();
   glPopMatrix();
 }
@@ -101,21 +101,23 @@ void Viewer::light_init_() {
   light_frame_ = new ManipulatedFrame();
   setMouseTracking(true);
 
-  light_frame_->setPosition(0, 0, 3);
+  light_frame_->setPosition(0, 0, 2);
 }
 
 void Viewer::init() {
-  // Restore previous viewer state.
-  setSceneRadius(30);
-  camera()->fitSphere(Vec(0,0,0), 1);
+  // Set Camera
+  setSceneRadius(2);
+  camera()->showEntireScene();
 
   control_init_();
 
   mesh_frame_ = new ManipulatedFrame();
+  
   setManipulatedFrame(mesh_frame_);
+  mesh_frame_->setPosition(0, 0, 1);
 
   light_init_();
-  restoreStateFromFile();
+  // restoreStateFromFile();
 
   // Opens help window
   // help();

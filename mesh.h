@@ -26,6 +26,8 @@ class Mesh {
     indices = is;
   };
   ~Mesh() {};
+
+
   
 };
 
