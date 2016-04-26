@@ -33,7 +33,7 @@ class Mesh {
   // Normalized device coordinates to [-1, 1]
   void normalize_coords();
 
-  // Mesh& operator+=(const Mesh& mesh);
+  Mesh& operator+=(const Mesh& mesh);
   
  };
 

@@ -15,6 +15,7 @@ class Model {
     loadModel_(path);
   }
   ~Model() {};
+  Mesh joined_mesh() const;
 
  private:
   bool loadModel_(const std::string& path);

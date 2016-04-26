@@ -30,3 +30,12 @@ void Mesh::normalize_coords() {
     v.Position = v.Position * normalizer;
   }
 }
+
+Mesh& Mesh::operator+=(const Mesh& new_mesh) {
+  const auto offset = vertices.size();
+  vertices.insert(vertices.end(), 
+      new_mesh.vertices.begin(), new_mesh.vertices.end());
+  for (const auto& i : new_mesh.indices) {
+    indices.push_back(i + offset);
+  }
+}

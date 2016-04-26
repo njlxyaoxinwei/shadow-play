@@ -73,8 +73,15 @@ Mesh Model::processMesh_(aiMesh* mesh) {
     }
   }
 
-  Mesh m(vertices, indices);
-  m.center_mesh();
-  m.normalize_coords();
-  return m;
+  return Mesh(vertices, indices);
+}
+
+Mesh Model::joined_mesh() const {
+  Mesh sum;
+  for (const auto& m : meshes) {
+    sum += m;
+  }
+  sum.center_mesh();
+  sum.normalize_coords();
+  return sum;
 }

@@ -13,7 +13,7 @@ namespace {
   Mesh GetMeshFromPath(const string& path) {
     Model m(path);
     if (m.meshes.size() > 0) {
-      return m.meshes[0];
+      return m.joined_mesh();
     } else {
       Die("No Mesh Detected!");
     }
