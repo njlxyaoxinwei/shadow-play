@@ -5,8 +5,8 @@
 int main(int argc, char const *argv[]) {
   bool pass = true;
   Model *m = new Model("../data/xy63.dragon.200.stl");
-  int nMesh = 1;
-  int nFace = 200;
+  unsigned int nMesh = 1;
+  unsigned int nFace = 200;
   printf("%s\n", "Testing on Dragon 200");
   printf("Should have %d mesh: %lu\n", nMesh, m->meshes.size());
   pass &= (nMesh == m->meshes.size());

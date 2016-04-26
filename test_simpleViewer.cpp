@@ -12,11 +12,10 @@ namespace {
 
   Mesh GetMeshFromPath(const string& path) {
     Model m(path);
-    if (m.meshes.size() > 0) {
-      return m.joined_mesh();
-    } else {
+    if (m.meshes.empty()) {
       Die("No Mesh Detected!");
     }
+    return m.joined_mesh();
   }
 } // namespace
 

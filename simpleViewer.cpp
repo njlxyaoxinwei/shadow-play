@@ -48,8 +48,8 @@ void Viewer::draw_mesh_() {
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
 
-  for (int i = 0; i < nTriangles; i++) {
-    int j = 3 * i;
+  for (unsigned int i = 0; i < nTriangles; i++) {
+    unsigned int j = 3 * i;
     unsigned int is[3] = {
       mesh.indices[j],
       mesh.indices[j+1],

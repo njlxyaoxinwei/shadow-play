@@ -38,4 +38,5 @@ Mesh& Mesh::operator+=(const Mesh& new_mesh) {
   for (const auto& i : new_mesh.indices) {
     indices.push_back(i + offset);
   }
+  return *this;
 }

@@ -2,7 +2,7 @@ project (shadow_play)
 
 cmake_minimum_required(VERSION 2.8)
 
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++11 -pedantic -Wall)
 
 find_package(CGAL COMPONENTS Qt5)
 include(${CGAL_USE_FILE})
