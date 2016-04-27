@@ -21,9 +21,9 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   include_directories(${ASSIMP_INCLUDE_DIR})
   
   # My Libraries
-  add_library(mylib_mesh SHARED mesh.cpp)
-  add_library(mylib_model SHARED model.cpp)
-  add_library(mylib_scene SHARED scene.cpp)
+  add_library(mylib_mesh STATIC mesh.cpp)
+  add_library(mylib_model STATIC model.cpp)
+  add_library(mylib_scene STATIC scene.cpp)
 
   target_link_libraries(mylib_model assimp mylib_mesh)
   qt5_use_modules(mylib_scene Xml OpenGL)
