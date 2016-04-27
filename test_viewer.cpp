@@ -6,6 +6,7 @@
 #include "helpers.h"
 #include "model.h"
 #include "viewer.h"
+#include "shadowViewer.h"
 
 namespace {
   using std::string;
@@ -33,7 +34,7 @@ int main(int argc, char** argv) {
   // Create Splitters
   QSplitter *hSplit  = new QSplitter(Qt::Vertical);
   Viewer v1(s, hSplit);
-  Viewer v2(s, hSplit, &v1);
+  ShadowViewer v2(s, hSplit, &v1);
 
   hSplit->setWindowTitle("Two Viewer");
   hSplit->show();

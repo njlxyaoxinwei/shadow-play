@@ -71,7 +71,7 @@ void Viewer::init() {
   light_init_();
   setMouseTracking(true);
 
-  qDebug() << "OpenGL: " << (char *)glGetString(GL_VERSION);
+  qDebug() << "Viewer OpenGL: " << (char *)glGetString(GL_VERSION);
 }
 
 void Viewer::draw_light_() {

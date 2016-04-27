@@ -42,7 +42,7 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   target_link_libraries(test_simpleViewer ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
                         mylib_model mylib_mesh)
   
-  add_executable(test_viewer test_viewer.cpp viewer.cpp)
+  add_executable(test_viewer test_viewer.cpp viewer.cpp shadowViewer.cpp)
   qt5_use_modules(test_viewer Xml OpenGL)
   target_link_libraries(test_viewer ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
                         mylib_model mylib_scene)
