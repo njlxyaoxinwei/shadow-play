@@ -1,6 +1,7 @@
 #include "viewer.h"
 
 #include <QDebug>
+#include <QObject>
 #include <QGLViewer/manipulatedFrame.h>
 #include <QGLViewer/qglviewer.h>
 
@@ -13,7 +14,10 @@ namespace {
 Viewer::Viewer(const Scene* const s, 
                QWidget* parent, 
                const QGLWidget* sharedWidget) 
-    : QGLViewer(parent, sharedWidget), scene_(s) {}
+    : QGLViewer(parent, sharedWidget), scene_(s) {
+  connect(scene_->light_frame_, SIGNAL(manipulated()), this, SLOT(update()));
+  connect(scene_->mesh_frame_, SIGNAL(manipulated()), this, SLOT(update()));
+}
 
 void Viewer::control_init_() {
   // Override mouse bindings
