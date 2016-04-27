@@ -20,17 +20,8 @@ ShadowViewer::ShadowViewer(const Scene* const s,
                            const QGLWidget* sharedWidget)
     : QGLViewer(parent, sharedWidget), scene_(s) {
   connect(scene_->light_frame_, SIGNAL(manipulated()), this, SLOT(update()));
-  connect(scene_->mesh_frame_, SIGNAL(manipulated()), this, SLOT(update()));    
-}
-
-void ShadowViewer::light_init_() {
-  glEnable(GL_LIGHT0);
-  constexpr GLfloat light0_ambient[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-  constexpr GLfloat light0_diffuse[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-  constexpr GLfloat light0_specular[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+  connect(scene_->mesh_frame_, SIGNAL(manipulated()), this, SLOT(update())); 
+  connect(scene_->mesh_frame_, SIGNAL(spun()), this, SLOT(update()));   
 }
 
 void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
@@ -44,16 +35,16 @@ void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
       mesh.indices[j+1],
       mesh.indices[j+2]
     };
-    // glColor3f(1.0f, 1.0f, 1.0f);
-    Vertex v[3] = {
-      mesh.vertices[is[0]],
-      mesh.vertices[is[1]],
-      mesh.vertices[is[2]]
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glm::vec3 v[3] = {
+      mesh.vertices[is[0]].Position,
+      mesh.vertices[is[1]].Position,
+      mesh.vertices[is[2]].Position
     };
     glm::vec4 w[3] = {
-      (mat * vec4(v[0].Position, 1)),
-      (mat * vec4(v[1].Position, 1)),
-      (mat * vec4(v[2].Position, 1))
+      (mat * vec4(v[0], 1)),
+      (mat * vec4(v[1], 1)),
+      (mat * vec4(v[2], 1))
     };
     // glNormal3f(v[0].Normal.x, v[0].Normal.y, v[0].Normal.z);
     glVertex2f(w[0].x, w[0].y);
@@ -75,7 +66,8 @@ void ShadowViewer::init() {
 
   setBackgroundColor(QColor(255, 255, 255));
   setForegroundColor(QColor(0, 0, 0));
-  light_init_();
+  glDisable(GL_LIGHT0);
+
 
   qDebug() << "ShadowViewer OpenGL: " << (char *)glGetString(GL_VERSION);
 }

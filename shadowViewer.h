@@ -16,7 +16,6 @@ class ShadowViewer : public QGLViewer {
 
  private:
   const Scene* const scene_;
-  void light_init_();
   void draw_shadow_(const Mesh& mesh, const qglviewer::Vec& pos);
 
 };
