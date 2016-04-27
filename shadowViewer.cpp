@@ -23,8 +23,9 @@ namespace {
   }
 
   vec2 ProjectXY(const vec3& p, const vec3& pos) {
-    float t = - p.z / pos.z;
-    return vec2(p.x + t * pos.x, p.y + t * pos.y);
+    vec3 v = p - pos;
+    float t = - p.z / v.z;
+    return vec2(p.x + t * v.x, p.y + t * v.y);
   }
 } // namespace
 
@@ -41,7 +42,7 @@ void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
   mat4 mat = make_mat4(scene_->mesh_frame_->worldMatrix());
-  vec3 light_dir = vec3(-pos.x, -pos.y, -pos.z);
+  vec3 light_pos = vec3(pos.x, pos.y, pos.z);
   for (unsigned int i = 0; i < nTriangles; i++) {
     unsigned int j = 3 * i;
     unsigned int is[3] = {
@@ -62,9 +63,9 @@ void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
     };
     // glNormal3f(v[0].Normal.x, v[0].Normal.y, v[0].Normal.z);
     vec2 s[3] = {
-      ProjectXY(w[0], light_dir),
-      ProjectXY(w[1], light_dir),
-      ProjectXY(w[2], light_dir)
+      ProjectXY(w[0], light_pos),
+      ProjectXY(w[1], light_pos),
+      ProjectXY(w[2], light_pos)
     };
     glVertex2f(s[0].x, s[0].y);
     glVertex2f(s[1].x, s[1].y);

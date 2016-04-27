@@ -39,10 +39,10 @@ void Viewer::control_init_() {
 }
 
 void Viewer::light_init_() {
-  glEnable(GL_LIGHT0);
+  glDisable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
   // ambient light
-  constexpr GLfloat light0_ambient[4] = {0.3f, 0.3f, 0.3f, 1.0f};
+  constexpr GLfloat light0_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
   constexpr GLfloat light0_diffuse[4] = {0.0f, 0.0f, 0.0f, 1.0f};
   constexpr GLfloat light0_specular[4] = {0.0f, 0.0f, 0.0f, 1.0f};
   glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
@@ -75,19 +75,13 @@ void Viewer::init() {
 }
 
 void Viewer::draw_light_() {
+  glEnable(GL_LIGHT0);
   if (scene_->light_frame_->grabsMouse()) {
-    glPointSize(15.0f);
+    drawLight(GL_LIGHT1, 1.3f);
   } else {
-    glPointSize(10.0f);
+    drawLight(GL_LIGHT1);
   }
-  
-  drawLight(GL_LIGHT1, 1.5f);
-  glColor3f(1.0f, 1.0f, 1.0f);
-  Vec pos_v = scene_->light_frame_->position();
-  glBegin(GL_POINTS);
-    glVertex3f(pos_v.x, pos_v.y, pos_v.z);
-  glEnd();
-
+  glDisable(GL_LIGHT0);
 }
 
 
@@ -118,7 +112,7 @@ void Viewer::draw_mesh_(const Mesh& mesh) {
 }
 
 void Viewer::update_light_() {
-  float pos[4] = {0.0, 0.0, 0.0, 0.0};
+  float pos[4] = {0.0, 0.0, 0.0, 1.0};
   Vec pos_v = scene_->light_frame_->position();
   pos[0] = float(pos_v.x);
   pos[1] = float(pos_v.y);
