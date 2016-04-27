@@ -23,9 +23,14 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   # My Libraries
   add_library(mylib_mesh SHARED mesh.cpp)
   add_library(mylib_model SHARED model.cpp)
+  add_library(mylib_scene SHARED scene.cpp)
 
   target_link_libraries(mylib_model assimp mylib_mesh)
-  set_target_properties(mylib_mesh mylib_model PROPERTIES
+  qt5_use_modules(mylib_scene Xml OpenGL)
+  target_link_libraries(mylib_scene mylib_mesh 
+                        ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES})
+
+  set_target_properties(mylib_mesh mylib_model mylib_scene PROPERTIES
                         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
   
   # Test Executables
@@ -36,7 +41,13 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   qt5_use_modules(test_simpleViewer Xml OpenGL)
   target_link_libraries(test_simpleViewer ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
                         mylib_model mylib_mesh)
-  set_target_properties(test_model test_simpleViewer PROPERTIES
+  
+  add_executable(test_viewer test_viewer.cpp viewer.cpp)
+  qt5_use_modules(test_viewer Xml OpenGL)
+  target_link_libraries(test_viewer ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
+                        mylib_model mylib_scene)
+  
+  set_target_properties(test_model test_simpleViewer test_viewer PROPERTIES
                         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test")
 
 else()
