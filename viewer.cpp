@@ -76,10 +76,18 @@ void Viewer::init() {
 
 void Viewer::draw_light_() {
   if (scene_->light_frame_->grabsMouse()) {
-    drawLight(GL_LIGHT1, 1.2f);
+    glPointSize(15.0f);
   } else {
-    drawLight(GL_LIGHT1);
+    glPointSize(10.0f);
   }
+  
+  drawLight(GL_LIGHT1, 1.5f);
+  glColor3f(1.0f, 1.0f, 1.0f);
+  Vec pos_v = scene_->light_frame_->position();
+  glBegin(GL_POINTS);
+    glVertex3f(pos_v.x, pos_v.y, pos_v.z);
+  glEnd();
+
 }
 
 
@@ -110,7 +118,7 @@ void Viewer::draw_mesh_(const Mesh& mesh) {
 }
 
 void Viewer::update_light_() {
-  float pos[4] = {0.0, 0.0, 0.0, 1.0};
+  float pos[4] = {0.0, 0.0, 0.0, 0.0};
   Vec pos_v = scene_->light_frame_->position();
   pos[0] = float(pos_v.x);
   pos[1] = float(pos_v.y);
