@@ -22,10 +22,18 @@ namespace {
     return np;
   }
 
-  vec2 ProjectXY(const vec3& p, const vec3& pos) {
+  bool ProjectXY(const vec3& p, const vec3& pos, vec2& ans) {
     vec3 v = p - pos;
+    if (v.z == 0) {
+      return false;
+    }
     float t = - p.z / v.z;
-    return vec2(p.x + t * v.x, p.y + t * v.y);
+    if (t >= 0) {
+      ans = vec2(p.x + t * v.x, p.y + t * v.y);
+      return true;
+    } else {
+      return false;
+    }
   }
 } // namespace
 
@@ -61,15 +69,15 @@ void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
       ApplyMat4(v[1].Position, mat),
       ApplyMat4(v[2].Position, mat)
     };
-    // glNormal3f(v[0].Normal.x, v[0].Normal.y, v[0].Normal.z);
-    vec2 s[3] = {
-      ProjectXY(w[0], light_pos),
-      ProjectXY(w[1], light_pos),
-      ProjectXY(w[2], light_pos)
-    };
-    glVertex2f(s[0].x, s[0].y);
-    glVertex2f(s[1].x, s[1].y);
-    glVertex2f(s[2].x, s[2].y);
+    vec2 s[3];
+    bool succ = ProjectXY(w[0], light_pos, s[0]);
+    succ &= ProjectXY(w[1], light_pos, s[1]);
+    succ &= ProjectXY(w[2], light_pos, s[2]);
+    if (succ) { 
+      glVertex2f(s[0].x, s[0].y);
+      glVertex2f(s[1].x, s[1].y);
+      glVertex2f(s[2].x, s[2].y);
+    }
   }
   glEnd();
 }
