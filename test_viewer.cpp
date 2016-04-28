@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
   Scene* s = new Scene(GetMeshFromPath(path));
 
   // Create Splitters
-  QSplitter *hSplit  = new QSplitter(Qt::Vertical);
+  QSplitter *hSplit  = new QSplitter(Qt::Horizontal);
   Viewer v1(s, hSplit);
   ShadowViewer v2(s, hSplit, &v1);
 
