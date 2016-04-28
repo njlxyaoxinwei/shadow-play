@@ -19,7 +19,7 @@ Viewer::Viewer(const Scene* const s,
   connect(scene_->mesh_frame_, SIGNAL(manipulated()), this, SLOT(update()));
 }
 
-void Viewer::control_init_() {
+void Viewer::control_frame_() {
   // Override mouse bindings
   setMouseBinding(Qt::ControlModifier, Qt::LeftButton, 
                   QGLViewer::CAMERA, QGLViewer::ROTATE);
@@ -36,6 +36,25 @@ void Viewer::control_init_() {
   setMouseBinding(Qt::NoModifier, Qt::MidButton, 
                   QGLViewer::FRAME, QGLViewer::ZOOM);
   setWheelBinding(Qt::NoModifier, QGLViewer::FRAME, QGLViewer::ZOOM);
+}
+
+void Viewer::control_init_() {
+  // Override mouse bindings
+  setMouseBinding(Qt::NoModifier, Qt::LeftButton, 
+                  QGLViewer::CAMERA, QGLViewer::ROTATE);
+  setMouseBinding(Qt::NoModifier, Qt::RightButton, 
+                  QGLViewer::CAMERA, QGLViewer::TRANSLATE);
+  setMouseBinding(Qt::NoModifier, Qt::MidButton, 
+                  QGLViewer::CAMERA, QGLViewer::ZOOM);
+  setWheelBinding(Qt::NoModifier, QGLViewer::CAMERA, QGLViewer::ZOOM);
+
+  setMouseBinding(Qt::ControlModifier, Qt::LeftButton, 
+                  QGLViewer::FRAME, QGLViewer::ROTATE);
+  setMouseBinding(Qt::ControlModifier, Qt::RightButton, 
+                  QGLViewer::FRAME, QGLViewer::TRANSLATE);
+  setMouseBinding(Qt::ControlModifier, Qt::MidButton, 
+                  QGLViewer::FRAME, QGLViewer::ZOOM);
+  setWheelBinding(Qt::ControlModifier, QGLViewer::FRAME, QGLViewer::ZOOM);
 }
 
 void Viewer::light_init_() {
@@ -66,7 +85,7 @@ void Viewer::init() {
 
   control_init_();
 
-  setManipulatedFrame(scene_->mesh_frame_);
+  // setManipulatedFrame(scene_->mesh_frame_);
 
   light_init_();
   setMouseTracking(true);
@@ -86,7 +105,10 @@ void Viewer::draw_light_() {
 
 
 void Viewer::draw_mesh_(const Mesh& mesh) {
-
+  bool selected = (selectedName() == 0);
+  if (selected) {
+    drawAxis();
+  }
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
 
@@ -97,7 +119,11 @@ void Viewer::draw_mesh_(const Mesh& mesh) {
       mesh.indices[j+1],
       mesh.indices[j+2]
     };
-    glColor3f(1.0f, 1.0f, 1.0f);
+    if (selected) {
+      glColor3f(1.0f, 1.0f, 1.0f);
+    } else {
+      glColor3f(0.7f, 0.7f, 0.7f);
+    }
     Vertex v[3] = {
       mesh.vertices[is[0]],
       mesh.vertices[is[1]],
@@ -109,6 +135,7 @@ void Viewer::draw_mesh_(const Mesh& mesh) {
     glVertex3f(v[2].Position.x, v[2].Position.y, v[2].Position.z);
   }
   glEnd();
+  glColor3f(1.0f, 1.0f, 1.0f);
 }
 
 void Viewer::update_light_() {
@@ -123,12 +150,33 @@ void Viewer::update_light_() {
 void Viewer::draw() {
   update_light_();
 
-  drawGrid(2);
   draw_light_();
 
   glPushMatrix();
   glMultMatrixd(scene_->mesh_frame_->matrix());
-  drawAxis();
+  // drawAxis();
   draw_mesh_(scene_->mesh);
   glPopMatrix();
+  drawGrid(2);
+}
+
+void Viewer::drawWithNames() {
+  glPushMatrix();
+  glMultMatrixd(scene_->mesh_frame_->matrix());
+  glPushName(0);
+  draw_mesh_(scene_->mesh);
+  glPopName();
+  glPopMatrix();
+}
+
+void Viewer::postSelection(const QPoint& point) {
+  bool mesh_selected = (selectedName() == 0);
+  if (mesh_selected) {
+    setManipulatedFrame(scene_->mesh_frame_);
+    control_frame_();
+    qDebug() << "Mesh Selected!";
+  } else {
+    setManipulatedFrame(NULL);
+    control_init_();
+  }
 }
