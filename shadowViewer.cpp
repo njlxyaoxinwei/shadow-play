@@ -41,15 +41,15 @@ ShadowViewer::ShadowViewer(const Scene* const s,
                            QWidget* parent,
                            const QGLWidget* sharedWidget)
     : QGLViewer(parent, sharedWidget), scene_(s) {
-  connect(scene_->light_frame_, SIGNAL(manipulated()), this, SLOT(update()));
-  connect(scene_->mesh_frame_, SIGNAL(manipulated()), this, SLOT(update())); 
-  connect(scene_->mesh_frame_, SIGNAL(spun()), this, SLOT(update()));   
+  connect(scene_->light_frame, SIGNAL(manipulated()), this, SLOT(update()));
+  connect(scene_->mesh_frame, SIGNAL(manipulated()), this, SLOT(update())); 
+  connect(scene_->mesh_frame, SIGNAL(spun()), this, SLOT(update()));   
 }
 
 void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
-  mat4 mat = make_mat4(scene_->mesh_frame_->worldMatrix());
+  mat4 mat = make_mat4(scene_->mesh_frame->worldMatrix());
   vec3 light_pos = vec3(pos.x, pos.y, pos.z);
   for (unsigned int i = 0; i < nTriangles; i++) {
     unsigned int j = 3 * i;
@@ -83,7 +83,7 @@ void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
 }
 
 void ShadowViewer::draw() {
-  Vec light_pos = scene_->light_frame_->position();
+  Vec light_pos = scene_->light_frame->position();
   draw_shadow_(scene_->mesh, light_pos);
 }
 

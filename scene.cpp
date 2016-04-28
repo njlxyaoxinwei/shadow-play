@@ -11,11 +11,11 @@ namespace {
 
 Scene::Scene(const Mesh& m) 
     : mesh(m),
-      mesh_frame_(new ManipulatedFrame()),
-      light_frame_(new ManipulatedFrame()) {
+      mesh_frame(new ManipulatedFrame()),
+      light_frame(new ManipulatedFrame()) {
   // Initialize mesh frames and light
-  mesh_frame_->setPosition(0, 0, 1);
-  light_frame_->setPosition(0, 0, 2.5);
+  mesh_frame->setPosition(0, 0, 1);
+  light_frame->setPosition(0, 0, 2.5);
 }
 
 

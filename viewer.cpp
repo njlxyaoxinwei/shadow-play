@@ -15,8 +15,9 @@ Viewer::Viewer(const Scene* const s,
                QWidget* parent, 
                const QGLWidget* sharedWidget) 
     : QGLViewer(parent, sharedWidget), scene_(s) {
-  connect(scene_->light_frame_, SIGNAL(manipulated()), this, SLOT(update()));
-  connect(scene_->mesh_frame_, SIGNAL(manipulated()), this, SLOT(update()));
+  connect(scene_->light_frame, SIGNAL(manipulated()), this, SLOT(update()));
+  connect(scene_->mesh_frame, SIGNAL(manipulated()), this, SLOT(update()));
+  connect(scene_->mesh_frame, SIGNAL(spun()), this, SLOT(update()));   
 }
 
 void Viewer::control_frame_() {
@@ -85,8 +86,6 @@ void Viewer::init() {
 
   control_init_();
 
-  // setManipulatedFrame(scene_->mesh_frame_);
-
   light_init_();
   setMouseTracking(true);
 
@@ -95,7 +94,7 @@ void Viewer::init() {
 
 void Viewer::draw_light_() {
   glEnable(GL_LIGHT0);
-  if (scene_->light_frame_->grabsMouse()) {
+  if (scene_->light_frame->grabsMouse()) {
     drawLight(GL_LIGHT1, 1.3f);
   } else {
     drawLight(GL_LIGHT1);
@@ -140,7 +139,7 @@ void Viewer::draw_mesh_(const Mesh& mesh) {
 
 void Viewer::update_light_() {
   float pos[4] = {0.0, 0.0, 0.0, 1.0};
-  Vec pos_v = scene_->light_frame_->position();
+  Vec pos_v = scene_->light_frame->position();
   pos[0] = float(pos_v.x);
   pos[1] = float(pos_v.y);
   pos[2] = float(pos_v.z);
@@ -153,8 +152,7 @@ void Viewer::draw() {
   draw_light_();
 
   glPushMatrix();
-  glMultMatrixd(scene_->mesh_frame_->matrix());
-  // drawAxis();
+  glMultMatrixd(scene_->mesh_frame->matrix());
   draw_mesh_(scene_->mesh);
   glPopMatrix();
   drawGrid(2);
@@ -162,7 +160,7 @@ void Viewer::draw() {
 
 void Viewer::drawWithNames() {
   glPushMatrix();
-  glMultMatrixd(scene_->mesh_frame_->matrix());
+  glMultMatrixd(scene_->mesh_frame->matrix());
   glPushName(0);
   draw_mesh_(scene_->mesh);
   glPopName();
@@ -172,7 +170,7 @@ void Viewer::drawWithNames() {
 void Viewer::postSelection(const QPoint& point) {
   bool mesh_selected = (selectedName() == 0);
   if (mesh_selected) {
-    setManipulatedFrame(scene_->mesh_frame_);
+    setManipulatedFrame(scene_->mesh_frame);
     control_frame_();
     qDebug() << "Mesh Selected!";
   } else {

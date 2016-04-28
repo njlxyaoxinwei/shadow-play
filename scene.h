@@ -14,8 +14,8 @@ class Scene {
   Scene(const Mesh&);
   ~Scene() {};
  
-  qglviewer::ManipulatedFrame* const mesh_frame_;
-  qglviewer::ManipulatedFrame* const light_frame_;
+  qglviewer::ManipulatedFrame* mesh_frame;
+  qglviewer::ManipulatedFrame* light_frame;
  
 };
 
