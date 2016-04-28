@@ -21,9 +21,9 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   include_directories(${ASSIMP_INCLUDE_DIR})
   
   # My Libraries
-  add_library(mylib_mesh STATIC mesh.cpp)
-  add_library(mylib_model STATIC model.cpp)
-  add_library(mylib_scene STATIC scene.cpp)
+  add_library(mylib_mesh SHARED mesh.cpp)
+  add_library(mylib_model SHARED model.cpp)
+  add_library(mylib_scene SHARED scene.cpp)
 
   target_link_libraries(mylib_model assimp mylib_mesh)
   qt5_use_modules(mylib_scene Xml OpenGL)
@@ -42,14 +42,14 @@ if (Qt5_FOUND AND QGLVIEWER_FOUND)
   target_link_libraries(test_simpleViewer ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
                         mylib_model mylib_mesh)
   
-  add_executable(test_viewer test_viewer.cpp viewer.cpp shadowViewer.cpp)
-  qt5_use_modules(test_viewer Xml OpenGL)
-  target_link_libraries(test_viewer ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
-                        mylib_model mylib_scene)
-  
-  set_target_properties(test_model test_simpleViewer test_viewer PROPERTIES
+  set_target_properties(test_model test_simpleViewer PROPERTIES
                         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test")
 
+  # Main Target
+  add_executable(shadow_play main.cpp viewer.cpp shadowViewer.cpp)
+  qt5_use_modules(shadow_play Xml OpenGL)
+  target_link_libraries(shadow_play ${QT_LIBRARIES} ${QGLVIEWER_LIBRARIES}
+                        mylib_model mylib_scene)
 else()
 
   message(FATAL_ERROR "FATAL: This example requires CGAL, QGLViewer, Qt5, GLM and Assimp.")

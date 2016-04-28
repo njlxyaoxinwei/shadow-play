@@ -2,21 +2,20 @@
 #define SHADOW_VIEWER_H
 
 #include <QGLViewer/qglviewer.h>
+
+#include "baseViewer.h"
 #include "scene.h"
 
-class ShadowViewer : public QGLViewer {
+class ShadowViewer : public BaseViewer {
  public:
-  ShadowViewer(const Scene* const s, 
-         QWidget* parent = NULL, 
-         const QGLWidget* sharedWidget = NULL);
- 
+  using BaseViewer::BaseViewer;
+
  protected:
   virtual void draw();
   virtual void init();
 
  private:
-  const Scene* const scene_;
-  void draw_shadow_(const Mesh& mesh, const qglviewer::Vec& pos);
+  void draw_shadow_(const int& i, const qglviewer::Vec& pos);
 
 };
 

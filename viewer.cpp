@@ -11,15 +11,6 @@ namespace {
   using qglviewer::Vec;
 } // namespace
 
-Viewer::Viewer(const Scene* const s, 
-               QWidget* parent, 
-               const QGLWidget* sharedWidget) 
-    : QGLViewer(parent, sharedWidget), scene_(s) {
-  connect(scene_->light_frame, SIGNAL(manipulated()), this, SLOT(update()));
-  connect(scene_->mesh_frame, SIGNAL(manipulated()), this, SLOT(update()));
-  connect(scene_->mesh_frame, SIGNAL(spun()), this, SLOT(update()));   
-}
-
 void Viewer::control_frame_() {
   // Override mouse bindings
   setMouseBinding(Qt::ControlModifier, Qt::LeftButton, 
@@ -81,7 +72,7 @@ void Viewer::light_init_() {
 
 void Viewer::init() {
   // Set camera
-  setSceneRadius(2);
+  setSceneRadius(scene_->radius);
   camera()->showEntireScene();
 
   control_init_();
@@ -103,8 +94,9 @@ void Viewer::draw_light_() {
 }
 
 
-void Viewer::draw_mesh_(const Mesh& mesh) {
-  bool selected = (selectedName() == 0);
+void Viewer::draw_mesh_(const int& i) {
+  const auto& mesh = scene_->meshes[i];
+  bool selected = (selectedName() == i);
   if (selected) {
     drawAxis();
   }
@@ -121,7 +113,7 @@ void Viewer::draw_mesh_(const Mesh& mesh) {
     if (selected) {
       glColor3f(1.0f, 1.0f, 1.0f);
     } else {
-      glColor3f(0.7f, 0.7f, 0.7f);
+      glColor3f(0.8f, 0.8f, 0.8f);
     }
     Vertex v[3] = {
       mesh.vertices[is[0]],
@@ -147,32 +139,36 @@ void Viewer::update_light_() {
 }
 
 void Viewer::draw() {
-  update_light_();
+  drawGrid(scene_->radius);
 
+  update_light_();
   draw_light_();
 
-  glPushMatrix();
-  glMultMatrixd(scene_->mesh_frame->matrix());
-  draw_mesh_(scene_->mesh);
-  glPopMatrix();
-  drawGrid(2);
+  for (int i = 0; i < scene_->n; i++) {
+    glPushMatrix();
+    glMultMatrixd(scene_->mesh_frames[i]->matrix());
+    draw_mesh_(i);
+    glPopMatrix();
+  }
 }
 
 void Viewer::drawWithNames() {
-  glPushMatrix();
-  glMultMatrixd(scene_->mesh_frame->matrix());
-  glPushName(0);
-  draw_mesh_(scene_->mesh);
-  glPopName();
-  glPopMatrix();
+  for (int i = 0; i < scene_->n; i++) {
+    glPushMatrix();
+    glMultMatrixd(scene_->mesh_frames[i]->matrix());
+    glPushName(i);
+    draw_mesh_(i);
+    glPopName();
+    glPopMatrix();
+  }
 }
 
 void Viewer::postSelection(const QPoint& point) {
-  bool mesh_selected = (selectedName() == 0);
-  if (mesh_selected) {
-    setManipulatedFrame(scene_->mesh_frame);
+  int selected = selectedName();
+  if (selected >= 0) {
+    setManipulatedFrame(scene_->mesh_frames[selected]);
     control_frame_();
-    qDebug() << "Mesh Selected!";
+    qDebug() << "Mesh " << selected << " Selected!";
   } else {
     setManipulatedFrame(NULL);
     control_init_();

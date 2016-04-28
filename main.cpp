@@ -10,11 +10,12 @@
 
 namespace {
   using std::string;
+  using std::vector;
 
   Mesh GetMeshFromPath(const string& path) {
     Model m(path);
     if (m.meshes.empty()) {
-      Die("No Mesh Detected!");
+      Die("No Mesh Detected in file " + path);
     }
     return m.joined_mesh();
   }
@@ -23,13 +24,14 @@ namespace {
 int main(int argc, char** argv) {
   QApplication app(argc, argv);
 
-  if (argc <= 1) {
-    Die("No Path Specified!");
-  }
   // Get Model Path
-  const auto& path = QApplication::arguments().at(1).toStdString();
+  vector<Mesh> meshes;
+  for (int i = 1; i < argc; i++) {
+    const auto& path = QApplication::arguments().at(i).toStdString();
+    meshes.push_back(GetMeshFromPath(path));
+  }
   // Create Scene
-  Scene* s = new Scene(GetMeshFromPath(path));
+  Scene* s = new Scene(meshes);
 
   // Create Splitters
   QSplitter *hSplit  = new QSplitter(Qt::Horizontal);

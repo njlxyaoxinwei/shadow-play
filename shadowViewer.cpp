@@ -37,19 +37,11 @@ namespace {
   }
 } // namespace
 
-ShadowViewer::ShadowViewer(const Scene* const s,
-                           QWidget* parent,
-                           const QGLWidget* sharedWidget)
-    : QGLViewer(parent, sharedWidget), scene_(s) {
-  connect(scene_->light_frame, SIGNAL(manipulated()), this, SLOT(update()));
-  connect(scene_->mesh_frame, SIGNAL(manipulated()), this, SLOT(update())); 
-  connect(scene_->mesh_frame, SIGNAL(spun()), this, SLOT(update()));   
-}
-
-void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
+void ShadowViewer::draw_shadow_(const int& i, const Vec& pos) {
+  const auto& mesh = scene_->meshes[i];
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
-  mat4 mat = make_mat4(scene_->mesh_frame->worldMatrix());
+  mat4 mat = make_mat4(scene_->mesh_frames[i]->worldMatrix());
   vec3 light_pos = vec3(pos.x, pos.y, pos.z);
   for (unsigned int i = 0; i < nTriangles; i++) {
     unsigned int j = 3 * i;
@@ -84,18 +76,19 @@ void ShadowViewer::draw_shadow_(const Mesh& mesh, const Vec& pos) {
 
 void ShadowViewer::draw() {
   Vec light_pos = scene_->light_frame->position();
-  draw_shadow_(scene_->mesh, light_pos);
+  for (int i = 0; i < scene_->n; i++) {
+    draw_shadow_(i, light_pos);
+  }
 }
 
 void ShadowViewer::init() {
   // Set camera
-  setSceneRadius(2);
+  setSceneRadius(scene_->radius);
   camera()->showEntireScene();
 
   setBackgroundColor(QColor(255, 255, 255));
   setForegroundColor(QColor(0, 0, 0));
   glDisable(GL_LIGHT0);
-
 
   qDebug() << "ShadowViewer OpenGL: " << (char *)glGetString(GL_VERSION);
 }
