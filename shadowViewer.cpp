@@ -50,7 +50,7 @@ void ShadowViewer::draw_shadow_(const int& i, const Vec& pos) {
       mesh.indices[j+1],
       mesh.indices[j+2]
     };
-    glColor3f(0.0f, 0.0f, 0.0f);
+    // glColor3f(0.0f, 0.0f, 0.0f);
     Vertex v[3] = {
       mesh.vertices[is[0]],
       mesh.vertices[is[1]],
@@ -79,6 +79,8 @@ void ShadowViewer::draw() {
   for (int i = 0; i < scene_->n; i++) {
     draw_shadow_(i, light_pos);
   }
+  glColor3f(1.0f, 0.0f, 0.0f);
+  drawGrid(scene_->radius);
 }
 
 void ShadowViewer::init() {
