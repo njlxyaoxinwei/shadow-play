@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
   Viewer v1(s, hSplit);
   ShadowViewer v2(s, hSplit, &v1);
 
-  hSplit->setWindowTitle("Two Viewer");
+  hSplit->setWindowTitle("Shadow Play");
   hSplit->show();
 
   return app.exec();
