@@ -16,7 +16,7 @@ class ShadowViewer : public BaseViewer {
 
  private:
   void draw_shadow_(const int& i, const qglviewer::Vec& pos);
-
+  void control_init_();
 };
 
 #endif

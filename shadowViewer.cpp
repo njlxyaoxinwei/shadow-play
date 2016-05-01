@@ -81,10 +81,18 @@ void ShadowViewer::init() {
   // Set camera
   setSceneRadius(scene_->radius);
   camera()->showEntireScene();
-
+  control_init_();
   setBackgroundColor(QColor(255, 255, 255));
   setForegroundColor(QColor(0, 0, 0));
   glDisable(GL_LIGHT0);
 
   qDebug() << "ShadowViewer OpenGL: " << (char *)glGetString(GL_VERSION);
+}
+
+void ShadowViewer::control_init_() {
+  // Override mouse bindings
+  clearMouseBindings();
+  setMouseBinding(Qt::NoModifier, Qt::MidButton, 
+                  QGLViewer::CAMERA, QGLViewer::ZOOM);
+  setWheelBinding(Qt::NoModifier, QGLViewer::CAMERA, QGLViewer::ZOOM);
 }
