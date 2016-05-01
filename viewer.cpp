@@ -78,14 +78,14 @@ void Viewer::init() {
   control_init_();
 
   light_init_();
-  setMouseTracking(true);
 
   qDebug() << "Viewer OpenGL: " << (char *)glGetString(GL_VERSION);
 }
 
 void Viewer::draw_light_() {
+  bool selected = (selectedName() == 0);
   glEnable(GL_LIGHT0);
-  if (scene_->light_frame->grabsMouse()) {
+  if (selected) {
     drawLight(GL_LIGHT1, 1.3f);
   } else {
     drawLight(GL_LIGHT1);
@@ -96,7 +96,7 @@ void Viewer::draw_light_() {
 
 void Viewer::draw_mesh_(const int& i) {
   const auto& mesh = scene_->meshes[i];
-  bool selected = (selectedName() == i);
+  bool selected = (selectedName() == i + 1);
   if (selected) {
     drawAxis();
   }
@@ -153,10 +153,13 @@ void Viewer::draw() {
 }
 
 void Viewer::drawWithNames() {
+  glPushName(0);
+  draw_light_();
+  glPopName();
   for (int i = 0; i < scene_->n; i++) {
     glPushMatrix();
     glMultMatrixd(scene_->mesh_frames[i]->matrix());
-    glPushName(i);
+    glPushName(i+1);
     draw_mesh_(i);
     glPopName();
     glPopMatrix();
@@ -165,10 +168,14 @@ void Viewer::drawWithNames() {
 
 void Viewer::postSelection(const QPoint& point) {
   int selected = selectedName();
-  if (selected >= 0) {
-    setManipulatedFrame(scene_->mesh_frames[selected]);
+  if (selected > 0) {
+    setManipulatedFrame(scene_->mesh_frames[selected - 1]);
     control_frame_();
     qDebug() << "Mesh " << selected << " Selected!";
+  } else if (selected == 0) {
+    setManipulatedFrame(scene_->light_frame);
+    control_frame_();
+    qDebug() << "Light Selected!";
   } else {
     setManipulatedFrame(NULL);
     control_init_();
