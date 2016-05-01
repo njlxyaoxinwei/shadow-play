@@ -183,12 +183,16 @@ void Viewer::postSelection(const QPoint& point) {
   }
 }
 
-void Viewer::keyReleaseEvent(QKeyEvent* e) {
-  // Alt + S
-  if (e->key() == Qt::Key_S && e->modifiers() == Qt::AltModifier) {
-    qDebug() << "Save Configuration Request Received!";
-    scene_->exportScene();
-    qDebug() << "Configuration saved as meshes.off!";
-  }
-  QGLViewer::keyReleaseEvent(e);
+QString Viewer::helpString() const {
+  QString text("<h2> Shadow Play </h2>");
+  text += "<i>A Shadow Visualizer</i><br /><br />";
+  text += "Basic Controls:<br />";
+  text += "1. Left click and drag mouse to rotate.<br />";
+  text += "2. Right click and drag to translate.<br />";
+  text += "3. Shift+Click to choose an object or light to manipulate. "
+          "Then the mouse controls are applied on the object. <br /><br />";
+  text += "Use Alt+S to save the configuration to an OFF-formatted mesh. "
+          "The light position is given in the header comment of the file.";
+
+  return text;
 }

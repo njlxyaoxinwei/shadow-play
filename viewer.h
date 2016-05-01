@@ -15,7 +15,7 @@ class Viewer : public BaseViewer {
   virtual void postSelection(const QPoint& p);
   virtual void draw();
   virtual void init();
-  virtual void keyReleaseEvent(QKeyEvent* e);
+  virtual QString helpString() const;
 
  private:
   void control_init_();
