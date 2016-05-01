@@ -1,6 +1,7 @@
 #include "viewer.h"
 
 #include <QDebug>
+#include <QKeyEvent>
 #include <QObject>
 #include <QGLViewer/manipulatedFrame.h>
 #include <QGLViewer/qglviewer.h>
@@ -179,5 +180,14 @@ void Viewer::postSelection(const QPoint& point) {
   } else {
     setManipulatedFrame(NULL);
     control_init_();
+  }
+}
+
+void Viewer::keyReleaseEvent(QKeyEvent* e) {
+  // Alt + S
+  if (e->key() == Qt::Key_S && e->modifiers() == Qt::AltModifier) {
+    qDebug() << "Save Configuration Request Detected!";
+  } else {
+    QGLViewer::keyReleaseEvent(e);
   }
 }
