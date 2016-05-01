@@ -186,8 +186,9 @@ void Viewer::postSelection(const QPoint& point) {
 void Viewer::keyReleaseEvent(QKeyEvent* e) {
   // Alt + S
   if (e->key() == Qt::Key_S && e->modifiers() == Qt::AltModifier) {
-    qDebug() << "Save Configuration Request Detected!";
-  } else {
-    QGLViewer::keyReleaseEvent(e);
+    qDebug() << "Save Configuration Request Received!";
+    scene_->exportScene();
+    qDebug() << "Configuration saved as meshes.off!";
   }
+  QGLViewer::keyReleaseEvent(e);
 }

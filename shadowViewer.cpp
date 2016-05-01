@@ -41,8 +41,8 @@ void ShadowViewer::draw_shadow_(const int& i, const Vec& pos) {
   const auto& mesh = scene_->meshes[i];
   const auto nTriangles = mesh.indices.size() / 3;
   glBegin(GL_TRIANGLES);
-  mat4 mat = make_mat4(scene_->mesh_frames[i]->worldMatrix());
   vec3 light_pos = vec3(pos.x, pos.y, pos.z);
+  const auto& coords = scene_->meshVertexWorldPositions(i);
   for (unsigned int i = 0; i < nTriangles; i++) {
     unsigned int j = 3 * i;
     unsigned int is[3] = {
@@ -50,16 +50,10 @@ void ShadowViewer::draw_shadow_(const int& i, const Vec& pos) {
       mesh.indices[j+1],
       mesh.indices[j+2]
     };
-    // glColor3f(0.0f, 0.0f, 0.0f);
-    Vertex v[3] = {
-      mesh.vertices[is[0]],
-      mesh.vertices[is[1]],
-      mesh.vertices[is[2]]
-    };
     vec3 w[3] = {
-      ApplyMat4(v[0].Position, mat),
-      ApplyMat4(v[1].Position, mat),
-      ApplyMat4(v[2].Position, mat)
+      coords[is[0]],
+      coords[is[1]],
+      coords[is[2]]
     };
     vec2 s[3];
     bool succ = ProjectXY(w[0], light_pos, s[0]);
