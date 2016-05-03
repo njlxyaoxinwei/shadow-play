@@ -9,7 +9,7 @@ include(${CGAL_USE_FILE})
 
 find_package(Qt5 QUIET COMPONENTS Xml OpenGL)
 
-find_package(QGLViewer)
+find_package(QGLViewer REQUIRED)
 
 find_package(assimp REQUIRED)
 
