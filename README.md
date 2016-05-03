@@ -39,3 +39,7 @@ The command-line arguments are a list of paths to 3D models. Shadow-Play support
 - Use Alt + S to save current configuration to `meshes.off`. It is an aggregated mesh consists of all meshes in the scene and their current coordinates. 
 - The light source coordinate is output on the second line of the file as a comment.
 - Meshes are re-triangulated and vertices may be duplicated.
+
+## Screenshot
+
+![Stereographic](img/screenshot1.png)
