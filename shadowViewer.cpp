@@ -17,11 +17,6 @@ namespace {
   using glm::vec2;
   using glm::mat4;
 
-  vec3 ApplyMat4(const vec3& p, const mat4& mat) {
-    vec3 np(mat * vec4(p, 1));
-    return np;
-  }
-
   bool ProjectXY(const vec3& p, const vec3& pos, vec2& ans) {
     vec3 v = p - pos;
     if (v.z == 0) {
