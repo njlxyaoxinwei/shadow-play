@@ -2,6 +2,10 @@ project (shadow_play)
 
 cmake_minimum_required(VERSION 2.8)
 
+if (POLICY CMP0043)
+  cmake_policy(SET CMP0043 NEW)
+endif()
+
 add_compile_options(-std=c++11 -pedantic -Wall)
 
 find_package(CGAL COMPONENTS Qt5)
