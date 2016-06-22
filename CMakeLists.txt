@@ -13,7 +13,7 @@ find_package(QGLViewer REQUIRED)
 
 find_package(assimp REQUIRED)
 
-find_package(glm REQUIRED)
+find_package(glm)
 
 if (Qt5_FOUND AND QGLVIEWER_FOUND)
   include_directories(${QGLVIEWER_INCLUDE_DIR})
